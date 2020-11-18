@@ -19,6 +19,39 @@
             return $conn;
         }
 
+        function buscarProducto(){
+            $con = $this->conectar();
+
+            $consulta = 'SELECT * FROM producto';
+
+            $stmt = $con->prepare($consulta);
+            $stmt->execute();
+            $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+            
+            json_encode($registros, JSON_FORCE_OBJECT);
+
+            return $registros;
+        }
+
+        function guardarComentario($nombre, $correo, $asunto, $mensaje){
+            $con = $this->conectar();
+            
+            $consulta = 'INSERT INTO comentario (nombre, correo, asunto, mensaje)
+            VALUES (:nombre, :correo, :asunto, :mensaje)';
+
+            $stmt = $con->prepare($consulta);
+            $rows = $stmt->execute(array(':nombre'=>$nombre,
+                                        ':correo'=>$correo,
+                                        ':asunto'=>$asunto,
+                                        ':mensaje'=>$mensaje));
+            /*
+            if($rows == 1){
+                echo 'Inserción correcta';
+            }
+            */
+            return $rows;
+        }
+
         function buscarUsuario($user, $pass){
             $con = $this->conectar();
 
